@@ -75,8 +75,12 @@ int main(int argc, char const *argv[])
 		cin >> a[i];
 
 	ll sum = accumulate(all(a), 0);
+	
+	if(sum%2 == 1)
+		cout << 0;
 
-	cout << equalSum(a, sum/2, n);
+	else
+		cout << equalSum(a, sum/2, n);
 
 	return 0;
 }
