@@ -1,0 +1,94 @@
+// By Malav Gajjar
+#include<bits/stdc++.h>
+//#include<ext/pd_ds/assoc_container.hpp>
+//#include<ext/pd_ds/tree_policy.hpp>
+//#include<ext/pd_ds/trie_policy.hpp>
+using namespace std;
+
+#define fio 			ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define ll	 			long long int 
+#define ld 				long double
+#define mod 			1000000009
+#define inf 			1e18
+#define endl 			"\n"
+#define pb 				push_back
+#define vi 				vector<ll>
+#define vs 				vector<string>
+#define pii 			pair<ll, ll>
+#define ump				unordered_map
+#define mp 				make_pair
+#define pq_max			priority_pueue<ll>
+#define pq_min			priority_pueue<ll, vi, greater<ll> >
+#define all(v)			v.begin(), v.end()
+#define ff				first
+#define ss				second
+#define rs				resize
+#define ub				upper_bound
+#define lb				lower_bound
+#define mid(l, r)		(l + (r-l)/2)
+#define bitc(x)			__builtin_popcount(x)
+#define sp(a)			setprecision(a)
+#define loop(a, b, c)		for(ll i=(a); i<=(b); i+=c)
+#define loop_r(a, b, c)	for(ll i=(a); i>=(b); i-=c)
+#define itr(c)			for(auto it=c.begin(); it!=c.end(); it++)
+#define log(x) 			cout << #x << ' ' << x;
+#define out(arr, a, b)	for(ll i=(a); i<=(b); i++)	cout << arr[i] << ' ';	cout << '\n';
+#define MAX(a, b, c) max(a, max(b, c))
+
+template <typename T> T gcd(T a, T b) { if(a%b) return gcd(b, a%b); return b; }
+template <typename T> T lcm(T a, T b) { return (a*b/gcd(a, b)); }
+
+void file_i_o()
+{
+	#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
+	#endif
+}
+
+ll equalSum(vi &a, ll sum, ll n)
+{
+	ll dp[n+1][sum+1];
+
+	loop(0, sum, 1)
+		dp[i][0] = 1;
+
+	loop(0, n, 1)
+		dp[0][i] = 0;
+
+	for(ll i=1; i<=n; i++){
+		for(ll j=1; j<=sum; j++){
+			if(j < a[i-1])
+				dp[i][j] = dp[i-1][j];
+
+			else
+				dp[i][j] = (dp[i-1][j] || dp[i-1][j-a[i-1]]);
+		}
+	}
+
+	return dp[n][sum];
+}
+
+int main(int argc, char const *argv[])
+{
+	fio;
+	file_i_o();
+	/* code */
+
+	ll n;
+	cin >> n;
+	vi a(n);
+
+	loop(0, n-1, 1)
+		cin >> a[i];
+
+	ll sum = accumulate(all(a), 0);
+
+	if(sum%2 == 1)
+		cout << 0;
+
+	else
+		cout << equalSum(a, sum/2, n);
+
+	return 0;
+}
