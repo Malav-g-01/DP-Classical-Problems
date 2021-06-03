@@ -4,59 +4,116 @@ Every student is assigned to read some consecutive books.
 The task is to assign books in such a way that the maximum 
 number of pages assigned to a student is minimum. */
 
+/* 						CP IS FUN !!!!!
+	Author :- Malav Gajjar
+*/
 #include<bits/stdc++.h>
-#define ll long long
-
+//#include<ext/pd_ds/assoc_container.hpp>
+//#include<ext/pd_ds/tree_policy.hpp>
+//#include<ext/pd_ds/trie_policy.hpp>
 using namespace std;
 
-int possible(int a[], int n, int m){
-	int sum = 0;
-	int student = 1;
+#define fio 			ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define ll	 			long long int 
+#define ld 				long double
+#define mod 			1000000007
+#define inf 			1e18
+#define endl 			"\n"
+#define pb 				push_back
+#define vi 				vector<ll>
+#define vs 				vector<string>
+#define pii 			pair<ll, ll>
+#define ump				unordered_map
+#define mp 				make_pair
+#define pq_max			priority_pueue<ll>
+#define pq_min			priority_pueue<ll, vi, greater<ll> >
+#define all(v)			v.begin(), v.end()
+#define ff				first
+#define ss				second
+#define rs				resize
+#define ub				upper_bound
+#define lb				lower_bound
+#define mid(l, r)		(l + (r-l)/2)
+#define bitc(x)			__builtin_popcount(x)
+#define sp(a)			setprecision(a)
+#define loop(i,a,b)		for(i=(a); i<=(b); i++)
+#define loop_r(i,a,b)	for(i=(a); i>=(b); i--)
+#define itr(c)			for(auto it=c.begin(); it!=c.end(); it++)
+#define log(x) 			cout << #x << ' ' << x;
+#define out(arr, a, b)	for(ll i=(a); i<=(b); i++)	cout << arr[i] << ' ';	cout << '\n';
 
-	for(int i=0; i<n; i++){
-		sum += a[i];
+template <typename T> T gcd(T a, T b) { if(a%b) return gcd(b, a%b); return b; }
+template <typename T> T lcm(T a, T b) { return (a*b/gcd(a, b)); }
 
-		if(sum>m){
-			sum = a[i];
-			student++;
-		}
-	}
-
-	return student;
+void file_i_o()
+{
+	#ifndef ONLINE_JUDGE
+		freopen("input.txt", "r", stdin);
+		freopen("output.txt", "w", stdout);
+	#endif
 }
 
-int pagePartition(int pages[], int n, int m)
+bool isPossible(vi &a, ll n, ll m, ll mid)
 {
-	int mx = 0, sum=0;
+	ll students = 1;
+	ll sum = 0;
 
-	for(int i=0; i<n; i++){
-		sum += pages[i];
-		mx = max(mx, pages[i]);
+	for(ll i=0; i<n; i++){
+
+		if(a[i] > mid)
+			return false;
+
+		sum += a[i];
+
+		if(sum > mid){
+			students++;
+			sum = a[i];
+		}
+
+		if(students > m)
+			return false;
 	}
 
-	int low = mx;
-	int high = sum;
+	return true;
+}
 
-	while(low < high){
-		int mid = (low + high)/2;
+ll maxPages(vi &a, ll n, ll m)
+{
+	ll sum = accumulate(all(a), 0);
+	ll h = sum;
+	ll l = 0;
+	ll ans = INT_MAX;
 
-		if(possible(pages, n, mid) <= m){
-			high = mid;
+	while(l<h){
+		ll mid = (l+h)/2;
+
+		if(isPossible(a, n, m, mid)){
+			ans = min(ans, mid);
+			h = mid-1;
 		}
 
 		else
-			low = mid+1;
+			l = mid+1;
 	}
 
-	return low;
+	return ans;
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
-    int a[] = {10, 20, 30, 40, 50};
-    int n = 5;
-    int m = 2;
-    cout << "Minimum possible maximum pages : " << pagePartition(a, n, m);
+	fio;
+	file_i_o();
+	/* code */
 
-    return 0;
+	ll n, m;
+	cin >> n >> m;
+	vi a(n);
+	ll i, j;
+
+	loop(i, 0, n-1)
+		cin >> a[i];
+
+	cout << maxPages(a, n ,m);
+
+	return 0;
 }
